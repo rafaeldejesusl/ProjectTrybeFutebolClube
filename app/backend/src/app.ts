@@ -1,6 +1,6 @@
 import * as express from 'express';
-import { UserFactory, TeamFactory } from './factory';
-import { validateEmail, validatePassword, validateToken } from './middlewares/user.middlewares';
+import teamRouter from './routes/team.routes';
+import userRouter from './routes/user.routes';
 
 class App {
   public app: express.Express;
@@ -20,23 +20,14 @@ class App {
       res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS,PUT,PATCH');
       res.header('Access-Control-Allow-Headers', '*');
 
+      this.app.use(userRouter);
+      this.app.use(teamRouter);
+
       next();
     };
 
     this.app.use(express.json());
     this.app.use(accessControl);
-
-    this.app.post('/login', validateEmail, validatePassword, (req, res, next) => {
-      UserFactory().login(req, res, next);
-    });
-
-    this.app.get('/login/validate', validateToken, (req, res, next) => {
-      UserFactory().loginValidate(req, res, next);
-    });
-
-    this.app.get('/teams', (req, res, next) => {
-      TeamFactory().getAll(req, res, next);
-    });
   }
 
   public start(PORT: string | number):void {
