@@ -1,16 +1,6 @@
 import * as express from 'express';
-import UserController from './controllers/user.controller';
-import UserRepository from './repository/user.repository';
-import UserService from './services/user.service';
+import { UserFactory, TeamFactory } from './factory';
 import { validateEmail, validatePassword, validateToken } from './middlewares/user.middlewares';
-
-const UserFactory = () => {
-  const repository = new UserRepository();
-  const service = new UserService(repository);
-  const controller = new UserController(service);
-
-  return controller;
-};
 
 class App {
   public app: express.Express;
@@ -42,6 +32,10 @@ class App {
 
     this.app.get('/login/validate', validateToken, (req, res, next) => {
       UserFactory().loginValidate(req, res, next);
+    });
+
+    this.app.get('/teams', (req, res, next) => {
+      TeamFactory().getAll(req, res, next);
     });
   }
 

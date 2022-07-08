@@ -15,3 +15,16 @@ export interface IUserModel {
   findByEmail(email: string): Promise<IUser | null>
   findById(id: number): Promise<IUser | null>
 }
+
+export interface ITeam {
+  id?: number;
+  teamName: string;
+}
+
+export interface ITeamService {
+  getAll(): Promise<ITeam[]>
+}
+
+export interface ITeamModel {
+  getAll(): Promise<ITeam[]>
+}
