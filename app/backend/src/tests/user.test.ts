@@ -61,6 +61,24 @@ describe('Model User', () => {
 describe('Model User', () => {
   before(() => {
     sinon.stub(User, 'findOne')
+      .resolves(userMock as User);
+  });
+
+  after(() => {
+    (User.findOne as sinon.SinonStub)
+      .restore();
+  })
+
+  it('metodo post /login com senha inválido', async () => {
+    const response = await chai.request(app).post('/login').send({ email: userMock.email, password: 'secret' });
+    expect(response.status).to.be.equal(401);
+    expect(response.body).to.be.eql({ message: "Incorrect email or password" });
+  });
+});
+
+describe('Model User', () => {
+  before(() => {
+    sinon.stub(User, 'findOne')
       .resolves(null);
   });
 
@@ -71,6 +89,24 @@ describe('Model User', () => {
 
   it('metodo post /login sem enviar o email', async () => {
     const response = await chai.request(app).post('/login').send({ password: 'secret_user' });
+    expect(response.status).to.be.equal(400);
+    expect(response.body).to.be.eql({ message: 'All fields must be filled' });
+  });
+});
+
+describe('Model User', () => {
+  before(() => {
+    sinon.stub(User, 'findOne')
+      .resolves(null);
+  });
+
+  after(() => {
+    (User.findOne as sinon.SinonStub)
+      .restore();
+  })
+
+  it('metodo post /login sem enviar a senha', async () => {
+    const response = await chai.request(app).post('/login').send({ email: userMock.email });
     expect(response.status).to.be.equal(400);
     expect(response.body).to.be.eql({ message: 'All fields must be filled' });
   });
