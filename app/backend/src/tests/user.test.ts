@@ -20,7 +20,7 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('User Entity', () => {
+describe('Model User', () => {
   before(() => {
     sinon.stub(User, 'findOne')
       .resolves(userMock as User) // para async
@@ -33,9 +33,27 @@ describe('User Entity', () => {
     (jwt.sign as sinon.SinonStub).restore();
   })
 
-  it('method post /login', async () => {
+  it('metodo post /login', async () => {
     const response = await chai.request(app).post('/login').send({ email: userMock.email, password: 'secret_user' });
     expect(response.status).to.be.equal(200);
     expect(response.body).to.be.eql({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjU0NTI3MTg5fQ.XS_9AA82iNoiVaASi0NtJpqOQ_gHSHhxrpIdigiT-fc' }); // eql compare objects
+  });
+});
+
+describe('Model User', () => {
+  before(() => {
+    sinon.stub(User, 'findOne')
+      .resolves(null);
+  });
+
+  after(() => {
+    (User.findOne as sinon.SinonStub)
+      .restore();
+  })
+
+  it('metodo post /login com email inválido', async () => {
+    const response = await chai.request(app).post('/login').send({ email: userMock.email, password: 'secret_user' });
+    expect(response.status).to.be.equal(401);
+    expect(response.body).to.be.eql({ message: "Incorrect email or password" });
   });
 });
