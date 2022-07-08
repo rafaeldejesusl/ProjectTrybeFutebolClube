@@ -21,6 +21,6 @@ export default class MatchRepository implements IMatchModel {
           { model: teamModel, as: 'teamAway', attributes: { exclude: ['id'] } },
         ] });
     }
-    return matches as [];
+    return matches as IMatch[];
   }
 }
