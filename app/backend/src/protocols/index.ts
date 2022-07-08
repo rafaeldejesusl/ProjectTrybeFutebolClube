@@ -30,3 +30,25 @@ export interface ITeamModel {
   getAll(): Promise<ITeam[]>
   getById(id: number): Promise<ITeam | null>
 }
+
+export interface IMatch {
+  id?: number;
+  homeTeam: number;
+  homeTeamGoals: number;
+  awayTeam: number;
+  awayTeamGoals: number;
+  teamHome: {
+    teamName: string;
+  };
+  teamAway: {
+    teamName: string;
+  }
+}
+
+export interface IMatchService {
+  getAll(): Promise<IMatch[]>
+}
+
+export interface IMatchModel {
+  getAll(): Promise<IMatch[]>
+}
