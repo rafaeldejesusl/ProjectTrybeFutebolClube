@@ -2,7 +2,7 @@ import * as express from 'express';
 import UserController from './controllers/user.controller';
 import UserRepository from './repository/user.repository';
 import UserService from './services/user.service';
-import validateEmail from './middlewares/user.middlewares';
+import { validateEmail, validatePassword } from './middlewares/user.middlewares';
 
 const UserFactory = () => {
   const repository = new UserRepository();
@@ -36,7 +36,7 @@ class App {
     this.app.use(express.json());
     this.app.use(accessControl);
 
-    this.app.post('/login', validateEmail, (req, res, next) => {
+    this.app.post('/login', validateEmail, validatePassword, (req, res, next) => {
       UserFactory().login(req, res, next);
     });
   }
