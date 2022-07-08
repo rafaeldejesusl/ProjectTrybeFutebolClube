@@ -46,9 +46,9 @@ export interface IMatch {
 }
 
 export interface IMatchService {
-  getAll(): Promise<IMatch[]>
+  getAll(inProgress: boolean | null): Promise<IMatch[]>
 }
 
 export interface IMatchModel {
-  getAll(): Promise<IMatch[]>
+  getAll(inProgress: boolean | null): Promise<IMatch[]>
 }
