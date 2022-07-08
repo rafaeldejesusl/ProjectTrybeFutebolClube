@@ -1,6 +1,6 @@
 import 'dotenv/config';
-import bcrypt = require('bcryptjs');
-import jwt = require('jsonwebtoken');
+import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 import { IUserModel, IUserService } from '../protocols/index';
 
 const secret = process.env.JWT_SECRET || 'jwt_secret';
