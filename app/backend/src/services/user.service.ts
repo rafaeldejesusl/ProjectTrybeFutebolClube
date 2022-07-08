@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { IUserModel, IUserService } from '../protocols/index';
+import { IUser, IUserModel, IUserService } from '../protocols/index';
 
 const secret = process.env.JWT_SECRET || 'jwt_secret';
 const jwtConfig = {
@@ -21,5 +21,13 @@ export default class UserService implements IUserService {
     const { id, role, username } = user;
     const token = jwt.sign({ id, username, role, email }, secret, jwtConfig);
     return token;
+  }
+
+  async loginValidate(token: string): Promise<string | boolean> {
+    const decoded = jwt.verify(token, secret) as IUser;
+    if (!decoded.id) return false;
+    const user = await this.model.findById(decoded.id);
+    if (!user) return false;
+    return user.role;
   }
 }

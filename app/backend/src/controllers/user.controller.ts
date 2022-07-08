@@ -16,4 +16,15 @@ export default class UserController {
       next(error);
     }
   }
+
+  async loginValidate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { authorization } = req.headers;
+      const role = await this.service.loginValidate(authorization as string);
+      if (!role) return res.status(401).json({ message: 'Invalid token' });
+      return res.status(200).json({ role });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
