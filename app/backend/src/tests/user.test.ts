@@ -57,3 +57,21 @@ describe('Model User', () => {
     expect(response.body).to.be.eql({ message: "Incorrect email or password" });
   });
 });
+
+describe('Model User', () => {
+  before(() => {
+    sinon.stub(User, 'findOne')
+      .resolves(null);
+  });
+
+  after(() => {
+    (User.findOne as sinon.SinonStub)
+      .restore();
+  })
+
+  it('metodo post /login sem enviar o email', async () => {
+    const response = await chai.request(app).post('/login').send({ password: 'secret_user' });
+    expect(response.status).to.be.equal(400);
+    expect(response.body).to.be.eql({ message: 'All fields must be filled' });
+  });
+});
