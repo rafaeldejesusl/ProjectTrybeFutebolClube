@@ -111,3 +111,77 @@ describe('Model User', () => {
     expect(response.body).to.be.eql({ message: 'All fields must be filled' });
   });
 });
+
+describe('Model User', () => {
+  before(() => {
+    sinon.stub(User, 'findByPk')
+      .resolves(userMock as User);
+    sinon.stub(jwt, 'verify').resolves(userMock);
+  });
+
+  after(() => {
+    (User.findByPk as sinon.SinonStub)
+      .restore();
+    (jwt.verify as sinon.SinonStub).restore();
+  })
+
+  it('metodo get /login/validate', async () => {
+    const response = await chai.request(app).get('/login/validate').set('authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjU0NTI3MTg5fQ.XS_9AA82iNoiVaASi0NtJpqOQ_gHSHhxrpIdigiT-fc');
+    expect(response.status).to.be.equal(200);
+    expect(response.body).to.be.eql({ role: 'user' });
+  });
+});
+
+describe('Model User', () => {
+  before(() => {
+    sinon.stub(User, 'findByPk')
+      .resolves(userMock as User);
+  });
+
+  after(() => {
+    (User.findByPk as sinon.SinonStub)
+      .restore();
+  })
+
+  it('metodo get /login/validate sem enviar token', async () => {
+    const response = await chai.request(app).get('/login/validate');
+    expect(response.status).to.be.equal(401);
+    expect(response.body).to.be.eql({ message: 'Token is required' });
+  });
+});
+
+describe('Model User', () => {
+  before(() => {
+    sinon.stub(jwt, 'verify').resolves(null);
+  });
+
+  after(() => {
+    (jwt.verify as sinon.SinonStub).restore();
+  })
+
+  it('metodo get /login/validate com token inválido', async () => {
+    const response = await chai.request(app).get('/login/validate').set('authorization', 'efc');;
+    expect(response.status).to.be.equal(401);
+    expect(response.body).to.be.eql({ message: 'Invalid token' });
+  });
+});
+
+describe('Model User', () => {
+  before(() => {
+    sinon.stub(User, 'findByPk')
+      .resolves(null);
+    sinon.stub(jwt, 'verify').resolves(userMock);
+  });
+
+  after(() => {
+    (User.findByPk as sinon.SinonStub)
+      .restore();
+    (jwt.verify as sinon.SinonStub).restore();
+  })
+
+  it('metodo get /login/validate com token de usuário não existente', async () => {
+    const response = await chai.request(app).get('/login/validate').set('authorization', 'efc');;
+    expect(response.status).to.be.equal(401);
+    expect(response.body).to.be.eql({ message: 'Invalid token' });
+  });
+});

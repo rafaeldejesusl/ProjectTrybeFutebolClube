@@ -24,8 +24,8 @@ export default class UserService implements IUserService {
   }
 
   async loginValidate(token: string): Promise<string | boolean> {
-    const decoded = jwt.verify(token, secret) as IUser;
-    if (!decoded.id) return false;
+    const decoded = await jwt.verify(token, secret) as IUser;
+    if (!decoded || !decoded.id) return false;
     const user = await this.model.findById(decoded.id);
     if (!user) return false;
     return user.role;
