@@ -37,18 +37,21 @@ export interface IMatch {
   homeTeamGoals: number;
   awayTeam: number;
   awayTeamGoals: number;
-  teamHome: {
+  inProgress?: boolean;
+  teamHome?: {
     teamName: string;
   };
-  teamAway: {
+  teamAway?: {
     teamName: string;
   }
 }
 
 export interface IMatchService {
   getAll(inProgress: boolean | null): Promise<IMatch[]>
+  create(match: IMatch): Promise<IMatch>
 }
 
 export interface IMatchModel {
   getAll(inProgress: boolean | null): Promise<IMatch[]>
+  create(match: IMatch): Promise<IMatch>
 }

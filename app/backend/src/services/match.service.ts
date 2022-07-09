@@ -9,4 +9,9 @@ export default class MatchService implements IMatchService {
     const matches = await this.model.getAll(inProgress);
     return matches;
   }
+
+  async create(match: IMatch): Promise<IMatch> {
+    const createdMatch = await this.model.create(match);
+    return createdMatch;
+  }
 }

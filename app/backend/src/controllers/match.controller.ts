@@ -18,4 +18,19 @@ export default class MatchController {
       next(error);
     }
   }
+
+  async create(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals } = req.body;
+      const createdMatch = await this.service.create({
+        homeTeam,
+        homeTeamGoals,
+        awayTeam,
+        awayTeamGoals,
+      });
+      return res.status(201).json(createdMatch);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
