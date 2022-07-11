@@ -49,9 +49,11 @@ export interface IMatch {
 export interface IMatchService {
   getAll(inProgress: boolean | null): Promise<IMatch[]>
   create(match: IMatch): Promise<IMatch>
+  finish(id: number): Promise<void>
 }
 
 export interface IMatchModel {
   getAll(inProgress: boolean | null): Promise<IMatch[]>
   create(match: IMatch): Promise<IMatch>
+  finish(id: number): Promise<void>
 }

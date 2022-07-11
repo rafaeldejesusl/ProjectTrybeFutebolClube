@@ -14,4 +14,8 @@ export default class MatchService implements IMatchService {
     const createdMatch = await this.model.create(match);
     return createdMatch;
   }
+
+  async finish(id: number): Promise<void> {
+    await this.model.finish(id);
+  }
 }
