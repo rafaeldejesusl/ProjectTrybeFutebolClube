@@ -99,3 +99,21 @@ describe('Model Match', () => {
     expect(response.body).to.be.eql(matchMock); // eql compare objects
   });
 });
+
+describe('Model Match', () => {
+  before(() => {
+    sinon.stub(Match, 'update')
+      .resolves(); // para async
+  });
+
+  after(() => {
+    (Match.update as sinon.SinonStub)
+      .restore();
+  })
+
+  it('metodo patch /matches/:id/finish', async () => {
+    const response = await chai.request(app).patch('/matches/1/finish');
+    expect(response.status).to.be.equal(200);
+    expect(response.body).to.be.eql({ message: 'Finished' }); // eql compare objects
+  });
+});
