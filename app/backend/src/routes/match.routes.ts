@@ -25,4 +25,8 @@ matchRouter.patch('/matches/:id/finish', (req, res, next) => {
   MatchFactory().finish(req, res, next);
 });
 
+matchRouter.patch('/matches/:id', (req, res, next) => {
+  MatchFactory().update(req, res, next);
+});
+
 export default matchRouter;

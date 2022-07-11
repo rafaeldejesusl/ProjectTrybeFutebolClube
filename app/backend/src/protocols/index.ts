@@ -50,10 +50,12 @@ export interface IMatchService {
   getAll(inProgress: boolean | null): Promise<IMatch[]>
   create(match: IMatch): Promise<IMatch>
   finish(id: number): Promise<void>
+  update(id: number, homeTeamGoals: number, awayTeamGoals: number): Promise<void>
 }
 
 export interface IMatchModel {
   getAll(inProgress: boolean | null): Promise<IMatch[]>
   create(match: IMatch): Promise<IMatch>
   finish(id: number): Promise<void>
+  update(id: number, homeTeamGoals: number, awayTeamGoals: number): Promise<void>
 }
