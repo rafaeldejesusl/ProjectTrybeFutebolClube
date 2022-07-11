@@ -81,3 +81,21 @@ describe('Model Match', () => {
     expect(response.body).to.be.eql([matchMock]); // eql compare objects
   });
 });
+
+describe('Model Match', () => {
+  before(() => {
+    sinon.stub(Match, 'create')
+      .resolves(matchMock as unknown as Match); // para async
+  });
+
+  after(() => {
+    (Match.create as sinon.SinonStub)
+      .restore();
+  })
+
+  it('metodo post /matches', async () => {
+    const response = await chai.request(app).post('/matches');
+    expect(response.status).to.be.equal(201);
+    expect(response.body).to.be.eql(matchMock); // eql compare objects
+  });
+});
