@@ -120,6 +120,24 @@ describe('Model Match', () => {
 
 describe('Model Match', () => {
   before(() => {
+    sinon.stub(Match, 'create')
+      .resolves(matchMock as unknown as Match); // para async
+  });
+
+  after(() => {
+    (Match.create as sinon.SinonStub)
+      .restore();
+  })
+
+  it('metodo post /matches com time inválido', async () => {
+    const response = await chai.request(app).post('/matches').send({ homeTeam: 8, awayTeam: 500 });
+    expect(response.status).to.be.equal(404);
+    expect(response.body).to.be.eql({ message: 'There is no team with such id!' }); // eql compare objects
+  });
+});
+
+describe('Model Match', () => {
+  before(() => {
     sinon.stub(Match, 'update')
       .resolves(); // para async
   });
