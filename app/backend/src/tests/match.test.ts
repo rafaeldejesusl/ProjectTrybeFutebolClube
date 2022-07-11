@@ -1,6 +1,7 @@
 import * as chai from 'chai';
 import { before } from 'mocha';
 import * as sinon from 'sinon';
+import * as jwt from 'jsonwebtoken';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
@@ -86,6 +87,26 @@ describe('Model Match', () => {
   before(() => {
     sinon.stub(Match, 'create')
       .resolves(matchMock as unknown as Match); // para async
+    sinon.stub(jwt, 'verify').resolves({ id: 1 });
+  });
+
+  after(() => {
+    (Match.create as sinon.SinonStub)
+      .restore();
+    (jwt.verify as sinon.SinonStub).restore();
+  })
+
+  it('metodo post /matches', async () => {
+    const response = await chai.request(app).post('/matches').set('authorization', 'token').send(matchMock);
+    expect(response.status).to.be.equal(201);
+    expect(response.body).to.be.eql(matchMock); // eql compare objects
+  });
+});
+
+describe('Model Match', () => {
+  before(() => {
+    sinon.stub(Match, 'create')
+      .resolves(matchMock as unknown as Match); // para async
   });
 
   after(() => {
@@ -93,10 +114,28 @@ describe('Model Match', () => {
       .restore();
   })
 
-  it('metodo post /matches', async () => {
+  it('metodo post /matches sem o token', async () => {
     const response = await chai.request(app).post('/matches').send(matchMock);
-    expect(response.status).to.be.equal(201);
-    expect(response.body).to.be.eql(matchMock); // eql compare objects
+    expect(response.status).to.be.equal(401);
+    expect(response.body).to.be.eql({ message: 'Token must be a valid token' }); // eql compare objects
+  });
+});
+
+describe('Model Match', () => {
+  before(() => {
+    sinon.stub(Match, 'create')
+      .resolves(matchMock as unknown as Match); // para async
+  });
+
+  after(() => {
+    (Match.create as sinon.SinonStub)
+      .restore();
+  })
+
+  it('metodo post /matches com token inválido', async () => {
+    const response = await chai.request(app).post('/matches').set('authorization', 'token inválido').send(matchMock);
+    expect(response.status).to.be.equal(401);
+    expect(response.body).to.be.eql({ message: 'Token must be a valid token' }); // eql compare objects
   });
 });
 
