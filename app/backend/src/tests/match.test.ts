@@ -94,9 +94,27 @@ describe('Model Match', () => {
   })
 
   it('metodo post /matches', async () => {
-    const response = await chai.request(app).post('/matches');
+    const response = await chai.request(app).post('/matches').send(matchMock);
     expect(response.status).to.be.equal(201);
     expect(response.body).to.be.eql(matchMock); // eql compare objects
+  });
+});
+
+describe('Model Match', () => {
+  before(() => {
+    sinon.stub(Match, 'create')
+      .resolves(matchMock as unknown as Match); // para async
+  });
+
+  after(() => {
+    (Match.create as sinon.SinonStub)
+      .restore();
+  })
+
+  it('metodo post /matches com times iguais', async () => {
+    const response = await chai.request(app).post('/matches').send({ homeTeam: 8, awayTeam: 8 });
+    expect(response.status).to.be.equal(401);
+    expect(response.body).to.be.eql({ message: 'It is not possible to create a match with two equal teams' }); // eql compare objects
   });
 });
 
