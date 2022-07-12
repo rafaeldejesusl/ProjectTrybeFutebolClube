@@ -1,6 +1,6 @@
 import { IMatch, IBoard, ITeam } from '../protocols';
 
-function getGoals(matches: IMatch[]) {
+function getHomeGoals(matches: IMatch[]) {
   const goals = { goalsFavor: 0, goalsOwn: 0, goalsBalance: 0 };
   matches.forEach((e) => {
     goals.goalsFavor += e.homeTeamGoals;
@@ -10,11 +10,31 @@ function getGoals(matches: IMatch[]) {
   return goals;
 }
 
-function getResult(matches: IMatch[]) {
+function getAwayGoals(matches: IMatch[]) {
+  const goals = { goalsFavor: 0, goalsOwn: 0, goalsBalance: 0 };
+  matches.forEach((e) => {
+    goals.goalsFavor += e.awayTeamGoals;
+    goals.goalsOwn += e.homeTeamGoals;
+  });
+  goals.goalsBalance = goals.goalsFavor - goals.goalsOwn;
+  return goals;
+}
+
+function getHomeResult(matches: IMatch[]) {
   const total = { totalVictories: 0, totalDraws: 0, totalLosses: 0 };
   matches.forEach((e) => {
     if (e.homeTeamGoals - e.awayTeamGoals > 0) total.totalVictories += 1;
     else if (e.homeTeamGoals - e.awayTeamGoals < 0) total.totalLosses += 1;
+    else total.totalDraws += 1;
+  });
+  return total;
+}
+
+function getAwayResult(matches: IMatch[]) {
+  const total = { totalVictories: 0, totalDraws: 0, totalLosses: 0 };
+  matches.forEach((e) => {
+    if (e.awayTeamGoals - e.homeTeamGoals > 0) total.totalVictories += 1;
+    else if (e.awayTeamGoals - e.homeTeamGoals < 0) total.totalLosses += 1;
     else total.totalDraws += 1;
   });
   return total;
@@ -27,9 +47,30 @@ function getTotals(victories: number, draws: number, losses: number) {
   return { totalGames, totalPoints, efficiency };
 }
 
-export function getBoard(team: ITeam, myMatches: IMatch[]) {
-  const { goalsFavor, goalsOwn, goalsBalance } = getGoals(myMatches);
-  const { totalVictories, totalDraws, totalLosses } = getResult(myMatches);
+export function getHomeBoard(team: ITeam, myMatches: IMatch[]) {
+  const { goalsFavor, goalsOwn, goalsBalance } = getHomeGoals(myMatches);
+  const { totalVictories, totalDraws, totalLosses } = getHomeResult(myMatches);
+  const { totalGames, totalPoints, efficiency } = getTotals(
+    totalVictories,
+    totalDraws,
+    totalLosses,
+  );
+  const name = team.teamName;
+  return { name,
+    totalPoints,
+    totalGames,
+    totalVictories,
+    totalDraws,
+    totalLosses,
+    goalsFavor,
+    goalsOwn,
+    goalsBalance,
+    efficiency };
+}
+
+export function getAwayBoard(team: ITeam, myMatches: IMatch[]) {
+  const { goalsFavor, goalsOwn, goalsBalance } = getAwayGoals(myMatches);
+  const { totalVictories, totalDraws, totalLosses } = getAwayResult(myMatches);
   const { totalGames, totalPoints, efficiency } = getTotals(
     totalVictories,
     totalDraws,

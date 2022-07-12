@@ -75,4 +75,5 @@ export interface IBoard {
 
 export interface IBoardService {
   getAllHome(): Promise<IBoard[]>
+  getAllAway(): Promise<IBoard[]>
 }

@@ -14,4 +14,13 @@ export default class BoardController {
       next(error);
     }
   }
+
+  async getAllAway(req: Request, res: Response, next: NextFunction) {
+    try {
+      const board = await this.service.getAllAway();
+      return res.status(200).json(board);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
