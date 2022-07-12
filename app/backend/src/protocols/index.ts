@@ -59,3 +59,20 @@ export interface IMatchModel {
   finish(id: number): Promise<void>
   update(id: number, homeTeamGoals: number, awayTeamGoals: number): Promise<void>
 }
+
+export interface IBoard {
+  name: string;
+  totalPoints: number;
+  totalGames: number;
+  totalVictories: number;
+  totalDraws: number;
+  totalLosses: number;
+  goalsFavor: number;
+  goalsOwn: number;
+  goalsBalance: number;
+  efficiency: number;
+}
+
+export interface IBoardService {
+  getAllHome(): Promise<IBoard[]>
+}
