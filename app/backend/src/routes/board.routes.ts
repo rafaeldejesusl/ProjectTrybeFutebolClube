@@ -11,4 +11,8 @@ boardRouter.get('/leaderboard/away', (req, res, next) => {
   BoardFactory().getAllAway(req, res, next);
 });
 
+boardRouter.get('/leaderboard', (req, res, next) => {
+  BoardFactory().getAll(req, res, next);
+});
+
 export default boardRouter;

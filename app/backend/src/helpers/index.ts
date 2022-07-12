@@ -89,6 +89,23 @@ export function getAwayBoard(team: ITeam, myMatches: IMatch[]) {
     efficiency };
 }
 
+export function getBoard(team: ITeam, myMatchesAway: IMatch[], myMatchesHome: IMatch[]) {
+  const away = getAwayBoard(team, myMatchesAway);
+  const home = getHomeBoard(team, myMatchesHome);
+  const board = { name: team.teamName,
+    totalPoints: away.totalPoints + home.totalPoints,
+    totalGames: away.totalGames + home.totalGames,
+    totalVictories: away.totalVictories + home.totalVictories,
+    totalDraws: away.totalDraws + home.totalDraws,
+    totalLosses: away.totalLosses + home.totalLosses,
+    goalsFavor: away.goalsFavor + home.goalsFavor,
+    goalsOwn: away.goalsOwn + home.goalsOwn,
+    goalsBalance: away.goalsBalance + home.goalsBalance,
+    efficiency: 0 };
+  board.efficiency = Math.round((board.totalPoints * 10000) / (board.totalGames * 3)) / 100;
+  return board;
+}
+
 export function orderBoard(board: IBoard[]) {
   const newBoard = board.sort((a, b) => {
     if (a.totalPoints > b.totalPoints) return -1;

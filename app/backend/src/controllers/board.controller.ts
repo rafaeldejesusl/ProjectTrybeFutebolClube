@@ -23,4 +23,13 @@ export default class BoardController {
       next(error);
     }
   }
+
+  async getAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const board = await this.service.getAll();
+      return res.status(200).json(board);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
