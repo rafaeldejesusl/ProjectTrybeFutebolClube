@@ -120,3 +120,50 @@ describe('Model Board', () => {
     expect(response.body).to.be.eql(boardMock);
   });
 });
+
+const boardMock1 = [
+  {
+    name: "Bahia",
+    totalPoints: 6,
+    totalGames: 2,
+    totalVictories: 2,
+    totalDraws: 0,
+    totalLosses: 0,
+    goalsFavor: 4,
+    goalsOwn: 2,
+    goalsBalance: 2,
+    efficiency: 100
+  },
+  {
+    name: "Avaí/Kindermann",
+    totalPoints: 0,
+    totalGames: 2,
+    totalVictories: 0,
+    totalDraws: 0,
+    totalLosses: 2,
+    goalsFavor: 2,
+    goalsOwn: 4,
+    goalsBalance: -2,
+    efficiency: 0
+  }
+]
+
+describe('Model Board', () => {
+  before(() => {
+    sinon.stub(Match, 'findAll')
+      .resolves(matchMock as unknown as Match[]);
+    sinon.stub(Team, 'findAll').resolves(teamMock as Team[]);
+  });
+
+  after(() => {
+    (Match.findAll as sinon.SinonStub)
+      .restore();
+    (Team.findAll as sinon.SinonStub).restore();
+  })
+
+  it('metodo get /leaderboard', async () => {
+    const response = await chai.request(app).get('/leaderboard');
+    expect(response.status).to.be.equal(200);
+    expect(response.body).to.be.eql(boardMock1);
+  });
+});
