@@ -100,3 +100,23 @@ describe('Model Board', () => {
     expect(response.body).to.be.eql(boardMock);
   });
 });
+
+describe('Model Board', () => {
+  before(() => {
+    sinon.stub(Match, 'findAll')
+      .resolves(matchMock as unknown as Match[]);
+    sinon.stub(Team, 'findAll').resolves(teamMock as Team[]);
+  });
+
+  after(() => {
+    (Match.findAll as sinon.SinonStub)
+      .restore();
+    (Team.findAll as sinon.SinonStub).restore();
+  })
+
+  it('metodo get /leaderboard/away', async () => {
+    const response = await chai.request(app).get('/leaderboard/away');
+    expect(response.status).to.be.equal(200);
+    expect(response.body).to.be.eql(boardMock);
+  });
+});
